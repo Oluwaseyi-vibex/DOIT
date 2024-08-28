@@ -14,35 +14,3 @@ const AxiosInstance = ()=>{
 }
 
 export default AxiosInstance
-
-// axios.interceptors.request.use(
-//     (config) => {
-//         const  {data: session}= useSession()
-
-//         const token = session?.user.token
-        
-//         if(token){
-            
-//             config.headers.Authorization= `Bearer ${token}`
-//         }
-        
-//         return config;
-
-//     },(error)=>{
-//         return Promise.reject(error)
-//     }
-// )
-
-// axios.interceptors.response.use(
-//     (config) => {
-        
-//         return config;
-
-//     },(error)=>{
-//        if(error.response) {
-//         if(error.response.status === 401) {
-//             // sign user out
-//         }
-//        }
-//     }
-// )

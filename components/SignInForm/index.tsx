@@ -52,7 +52,7 @@ const SignInForm = () => {
         <Image src="/username.png" alt="username" width={28} height={28} />
         <input
           type="email"
-          className="grow"
+          className="grow text-black"
           placeholder="Enter Email"
           {...register("email", {
             required: "Email is required",
@@ -65,7 +65,7 @@ const SignInForm = () => {
         <Image src="/password.png" alt="password" width={28} height={28} />
         <input
           type="password"
-          className="grow"
+          className="grow text-black"
           placeholder="Enter Password"
           {...register("password", {
             required: "Password is required",

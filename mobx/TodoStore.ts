@@ -1,46 +1,83 @@
+
+import http from "@/services/httpServices";
+import { baseURL } from "@/services/TodoServices";
 import { makeAutoObservable } from "mobx";
 
-interface TaskType{
-    id: number  
-    name: string;
-    descrip: string;
-    priority: string
-    status: string
-    date: string
-}
-
+export type Todo = {
+  id: string;
+  title: string;
+  description: string;
+  priority: string;
+  status: string;
+  completed: boolean;
+  completedAt: string | null;
+  expiresAt: string;
+  createdAt: string;
+  updatedAt: string;
+  todoId: string;
+};
 class TodoStore {
+    todoExpireDate:string=''
+    todoId: string | null = null;
+    todos: Todo[] = [];
+    todo: Todo = {
+        id: '',
+        title:'',
+        description: '',
+        priority: '',
+        status: '',
+        completed: false,
+        completedAt: '' ,
+        expiresAt: '',
+        createdAt: '',
+        updatedAt: '',
+        todoId: ''
+    }
 
-    tasks = [
-        {
-            id: 1,  
-            name: "Init the Project",
-            descrip: "Buy gifts on the way and pick up cake from the bakery. 6 PM | Fresh Elements",
-            priority: "Moderate",
-            status: "Not Started",
-            date: "20/06/2023"
-        },
 
-        {
-            id: 2,  
-            name: "Burn the Project",
-            descrip: "Buy gifts on the way and pick up cake from the bakery. 6 PM | Fresh Elements",
-            priority: "Moderate",
-            status: "Not Started",
-            date: "20/06/2023"
-        }
-    ]
+    constructor() {
+        makeAutoObservable(this);
+    }
+
+    setEditTodos(todos: Todo[]) {
+        this.todos = todos;
+    }
+
+     setEditTodo = (payload : Todo)=>{
+        let newEdit = {...payload}
+        // newEdit.expiresAt = "2024-08-30T14:00"
+        
+        // `${new Date(newEdit.expiresAt).getFullYear()}-${new Date(newEdit.expiresAt).getMonth()}-${new Date(newEdit.expiresAt).getDay()}T${new Date(newEdit.expiresAt).getHours()}:${new Date(newEdit.expiresAt).getMinutes()}}`
+
+
+        console.log(new Date(newEdit.expiresAt));
+        this.todo = newEdit
+        console.log(payload)
+     }
+
+fetchProjectTodos = async (projectId: string) => {
+    try {
+        const {data}: any = await http.get(`${baseURL}/todo/project-todos/${projectId}?status=pending`);
+        console.log(`Fetched Todos:`, data);
+        this.setEditTodos(data?.data);
+        return data; // Ensure this returns the correct structure
+    } catch (error: any) {
+        console.error(`Error fetching todos:`, error);
+        throw new Error('Failed to fetch project todos');
+    }
+};
+    setTodoId=(deadline: string)=>{
+        this.todoId=deadline
+    }
+
+    setNewDeadline = (deadline: string) => {
+        this.todoExpireDate= deadline;
+    }
 
     message:string = ''
     
     loading:boolean = false
-    constructor(){
-        makeAutoObservable(this);
-    }
-    updateMessage(){
-        this.message = 'Hello there'
-        this.tasks
-    }
+    
 }
 
 const todoStore = new TodoStore()

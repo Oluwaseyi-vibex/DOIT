@@ -1,21 +1,38 @@
 "use client";
-import Link from "next/link";
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
-import projectStore from "@/mobx/ProjectStore";
-const ProjectCard = ({
+import Link from "next/link";
+import { useRouter } from "next/router";
+import todoStore from "@/mobx/TodoStore";
+
+interface ProjectCardProps {
+  key: string;
+  newProjectName: string;
+  projectDeadline: string;
+  aboutProject: string;
+  projectId: string;
+}
+
+const ProjectCard: React.FC<ProjectCardProps> = ({
   newProjectName,
   aboutProject,
   projectDeadline,
-}: {
-  newProjectName: string;
-  aboutProject: string;
-  projectDeadline: string;
+  projectId,
 }) => {
+  // const router = useRouter();
+
+  // console.log("Router", router);
+
+  function replaceSpacesWithUnderscores(str: string) {
+    return str.replace(/ /g, "_");
+  }
+  const projectName = replaceSpacesWithUnderscores(newProjectName);
+  const todoId = todoStore.todoId;
+
   return (
     <Link
-      className="w-[250px] py-4 scroll-container px-4 max-h-[100px] overflow-auto rounded-xl flex flex-col gap-2 bg-[#FF6767]/40 "
-      href={"/dashboard/dashboardManager"}
+      href={`/dashboard/dashboardManager?name=${projectName}&id=${projectId}&todoid=${todoId}`}
+      className="w-[250px] py-4 scroll-container px-4 max-h-[150px] overflow-auto rounded-xl flex flex-col gap-2 bg-[#FF6767]/40 "
     >
       <h1 className="text-lg tracking-wide uppercase text-white font-bold ">
         {newProjectName}

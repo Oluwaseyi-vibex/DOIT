@@ -1,15 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+// import { useRouter } from "next/router";
+import React, { useState } from "react";
 import Image from "next/image";
 import ProjectCard from "@/components/projectCard";
 import { useSession } from "next-auth/react";
 
 import { observer } from "mobx-react-lite";
 import projectStore from "@/mobx/ProjectStore";
-import projectCard from "@/components/projectCard";
-import { CreateProject } from "@/components";
 
-import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import DateInput from "@/components/dateInput";
 import { useQuery } from "@tanstack/react-query";
@@ -24,7 +22,8 @@ interface ProjectData {
 }
 
 const Projects = () => {
-  // setProjectCards([...projectCards, <ProjectCard key={projectCards.length} />]);
+  // const router = useRouter();
+  // const { id } = router.query;
   const [isProjectModalVisible, setProjectModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -32,31 +31,17 @@ const Projects = () => {
     setProjectModal(!isProjectModalVisible);
   };
 
-  const [showProjectCard, setShowProjectCard] = useState(false);
-  // const addProjectCard = (e: any) => {
-  //   setShowProjectCard(true);
-  //   setProjectModal(!isProjectModalVisible);
-
-  //   setProjectCards([
-  //     ...projectCards,
-  //     <ProjectCard key={projectCards.length} />,
-  //   ]);
-  // };
-
   const handleProjectNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     projectStore.setNewProjectName(e.target.value);
-    console.log(projectStore.newProjectName);
+    // console.log(projectStore.newProjectName);
   };
 
   const handleAboutProjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     projectStore.setNewAboutProject(e.target.value);
-    console.log(projectStore.aboutProject);
+    // console.log(projectStore.aboutProject);
   };
 
   const { data: session, status } = useSession();
-  const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const token = session?.user.token;
-  // console.log(token);
 
   const projectData: ProjectData = {
     title: projectStore.newProjectName,
@@ -64,19 +49,23 @@ const Projects = () => {
     expiresAt: projectStore.projectDeadline,
   };
 
+  const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const createProject = async () => {
     try {
       setLoading(true);
-      const response = await http.post(`/project/create`, projectData);
+      const response = await http.post(
+        `${baseURL}/project/create`,
+        projectData
+      );
       setLoading(false);
       console.log("Project created successfully:", response.data);
       toast.success("Project created successfully");
 
-      setShowProjectCard(true);
       setProjectModal(!isProjectModalVisible);
     } catch (error) {
       console.error("Error creating project:", error);
       toast.error("Failed to create project");
+      setLoading(false);
     }
   };
 
@@ -86,8 +75,13 @@ const Projects = () => {
   });
 
   const myProjects = data && data.data ? data.data : [];
+  // console.log("mypid", myProjects.id);
+  // const projectId = myProjects.map((todo: any) => todo.id);
+  // projectStore.setProjectId(projectId);
+  // console.log(projectStore.projectId);
 
-  console.log(myProjects);
+  // console.log(myProjects);
+
   return (
     <>
       <main className="w-full h-full flex flex-col overflow-hidden justify-end  ">
@@ -103,6 +97,16 @@ const Projects = () => {
 
           <div className="w-full h-[550px] overflow-hidden">
             <div className="w-full grid-cols-4 gap-0  grid overflow-y-scroll  h-full">
+              {myProjects?.map((project: any) => (
+                <ProjectCard
+                  key={project.id}
+                  newProjectName={project.title}
+                  projectDeadline={project.expiresAt}
+                  aboutProject={project.about}
+                  projectId={project.id}
+                />
+              ))}
+
               <div className="flex w-fit gap-3">
                 <div
                   onClick={toggleProjectModal}
@@ -198,14 +202,6 @@ const Projects = () => {
                     <Toaster />
                   </div>
                 )}
-                {myProjects?.map((project: any) => (
-                  <ProjectCard
-                    key={project.id}
-                    newProjectName={project.title}
-                    projectDeadline={project.expiresAt}
-                    aboutProject={project.about}
-                  />
-                ))}
               </div>
             </div>
           </div>

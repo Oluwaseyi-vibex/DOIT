@@ -6,6 +6,7 @@ class ProjectStore{
     newProjectName = '';
     aboutProject= ''
     projectDeadline = ''
+    // projectId=''
 
     constructor() {
         makeAutoObservable(this);
@@ -31,6 +32,10 @@ class ProjectStore{
         this.projectDeadline= deadline;
     }
 
+    // setProjectId=(id: string)=>{
+    //     this.projectId= id;
+    // }
+
     addProject = () => {
         if (this.newProjectName.trim()) {
             this.projects.push(this.newProjectName, this.aboutProject, this.projectDeadline);
@@ -38,6 +43,7 @@ class ProjectStore{
             this.aboutProject= '';
             this.projectDeadline=''
             this.isModalOpen = false;
+            // this.projectId= ''
         }
     };
 

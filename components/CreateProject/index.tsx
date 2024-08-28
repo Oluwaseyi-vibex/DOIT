@@ -15,7 +15,7 @@ const CreateProject: React.FC = () => {
   const { data: session, status } = useSession();
   const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const token = session?.user.token;
-  console.log(token);
+  // console.log(token);
 
   const projectData: ProjectData = {
     title: "nodeit new",

@@ -159,7 +159,7 @@ const DashboardNavSection = () => {
         >
           <DashboardNav
             navLink="/dashboard/projects"
-            img="/help.png"
+            img="/projects.png"
             name="My Projects"
             width={22}
             height={22}

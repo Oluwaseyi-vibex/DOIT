@@ -1,5 +1,79 @@
+"use client";
 import { montserrat } from "@/utils/fonts/font";
-export default function AddTaskModal() {
+import { observer } from "mobx-react-lite";
+import http from "@/services/httpServices";
+import toast, { Toaster } from "react-hot-toast";
+
+import { ChangeEvent, useState } from "react";
+import todoStore from "@/mobx/TodoStore";
+import { useSearchParams } from "next/navigation";
+
+interface TodoData {
+  title: string;
+  description: string;
+  priority: string;
+  expiresAt: string;
+  todoId: string;
+}
+
+const AddTaskModal = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState("");
+  const [expiresAt, SetExpiresAt] = useState("");
+  const [todoId, SetTodoId] = useState("");
+  const [extremeChecked, setExtremeChecked] = useState(false);
+  const [moderateChecked, setModerateChecked] = useState(false);
+  const [lowChecked, setLowChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+  const handlePriorityChange = (priority: string) => {
+    setPriority(priority);
+    setExtremeChecked(priority === "extreme");
+    setModerateChecked(priority === "moderate");
+    setLowChecked(priority === "low");
+  };
+
+  const handleExpireDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const dateValue = e.target.value;
+    SetExpiresAt(dateValue);
+    console.log(dateValue);
+    const currentDate = new Date();
+    console.log(currentDate);
+    todoStore.setNewDeadline(currentDate.toISOString());
+    console.log(todoStore.todoExpireDate);
+  };
+
+  const searchParams = useSearchParams();
+  // const name = searchParams.get("name") as string;
+  const projectId = searchParams.get("id") as string;
+
+  const createTodo = async () => {
+    const newId = projectId;
+    const todoData: TodoData = {
+      title: title,
+      description: description,
+      priority: priority,
+      expiresAt: todoStore.todoExpireDate,
+      todoId: newId,
+    };
+
+    try {
+      setLoading(true);
+      const response = await http.post(`${baseURL}/todo/create`, todoData);
+      console.log("Task created successfully:", response.data);
+      toast.success("Task created successfully");
+      setLoading(false);
+    } catch (error) {
+      console.log(`Error creating todo: ${error}`, error);
+      toast.error("Failed to create task");
+      setLoading(false);
+    }
+    // console.log(todoData);
+  };
+
   return (
     <dialog id="my_modal_1" className="modal ">
       <div
@@ -39,7 +113,11 @@ export default function AddTaskModal() {
             <input
               type="text"
               placeholder=""
-              className="input input-bordered w-[511px] bg-white max-w-full border-[#A1A3AB] h-[37px] p-2"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+              className="input input-bordered text-black w-[511px] bg-white max-w-full border-[#A1A3AB] h-[37px] p-2"
             />
           </div>
 
@@ -48,12 +126,14 @@ export default function AddTaskModal() {
               className="text-sm font-semibold text-black tracking-wider"
               htmlFor="Date"
             >
-              Date
+              Expire at
             </label>
             <input
-              type="date"
+              type="datetime-local"
               placeholder=""
-              className="input input-bordered w-[511px] bg-white max-w-full border-[#A1A3AB] h-[37px] p-2"
+              value={expiresAt}
+              onChange={handleExpireDateChange}
+              className="input input-bordered text-black w-[511px] bg-white max-w-full border-[#A1A3AB] h-[37px] p-2"
             />
           </div>
 
@@ -69,6 +149,8 @@ export default function AddTaskModal() {
                 <span className="bg-[#F21E1E] w-[7px] h-[7px] rounded-full"></span>
                 <p className="text-[13px]">Extreme</p>
                 <input
+                  checked={extremeChecked} // Step 3: Bind state to the checkbox
+                  onChange={() => handlePriorityChange("extreme")}
                   type="checkbox"
                   className="checkbox rounded-none border-[#A1A3AB] w-[15px] h-[15px]"
                 />
@@ -78,6 +160,8 @@ export default function AddTaskModal() {
                 <span className="bg-[#3ABEFF] w-[7px] h-[7px] rounded-full"></span>
                 <p className="text-[13px]">Moderate</p>
                 <input
+                  checked={moderateChecked}
+                  onChange={() => handlePriorityChange("moderate")}
                   type="checkbox"
                   className="checkbox rounded-none bg-white border border-[#A1A3AB] w-[15px] h-[15px]"
                 />
@@ -87,6 +171,8 @@ export default function AddTaskModal() {
                 <span className="bg-[#05A301] w-[7px] h-[7px] rounded-full"></span>
                 <p className="text-[13px]">Low</p>
                 <input
+                  checked={lowChecked}
+                  onChange={() => handlePriorityChange("low")}
                   type="checkbox"
                   className="checkbox rounded-none bg-white border border-[#A1A3AB] w-[15px] h-[15px]"
                 />
@@ -102,13 +188,29 @@ export default function AddTaskModal() {
               Task Description
             </label>
             <textarea
-              className="textarea textarea-bordered bg-white w-[511px] h-full border-[#A1A3AB] "
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              className="textarea text-black textarea-bordered bg-white w-[511px] h-full border-[#A1A3AB] "
               placeholder=""
             ></textarea>
           </div>
         </form>
-        <button className="py-2 px-4 bg-[#F24E1E] text-white">Done</button>
+        <button
+          onClick={createTodo}
+          className="py-2 px-4 bg-[#F24E1E] text-white"
+        >
+          {loading ? (
+            <span className="loading loading-spinner loading-md"></span>
+          ) : (
+            <p>Done</p>
+          )}
+        </button>
+        <Toaster />
       </div>
     </dialog>
   );
-}
+};
+
+export default observer(AddTaskModal);
