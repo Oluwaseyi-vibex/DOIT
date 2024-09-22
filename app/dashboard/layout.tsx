@@ -20,7 +20,7 @@ export default async function DashboardLayout({
   //   redirect("api/auth/signin?callbackUrl=/server");
   // }
   return (
-    <section
+    <main
       className={`${inter.className} w-full h-screen flex flex-col items-center justify-center`}
       style={{
         backgroundImage: `url('/dashboardBg.png')`,
@@ -85,6 +85,6 @@ export default async function DashboardLayout({
           </div>
         </div>
       </div>
-    </section>
+    </main>
   );
 }

@@ -28,11 +28,11 @@ const PendingTaskCard = () => {
       </div>
 
       <div className="flex items-center gap-3 flex-col justify-evenly">
-        <div className="flex cursor-pointer w-fit h-fit gap-2">
+        {/* <div className="flex cursor-pointer w-fit h-fit gap-2">
           <span className="w-[3px] h-[3px] outline outline-2 outline-[#A1A3AB] rounded-full bg-[#white] flex items-center justify-center"></span>
           <span className="w-[3px] h-[3px] outline outline-2 outline-[#A1A3AB] rounded-full bg-[#white] flex items-center justify-center"></span>
           <span className="w-[3px] h-[3px] outline outline-2 outline-[#A1A3AB] rounded-full bg-[#white] flex items-center justify-center"></span>
-        </div>
+        </div> */}
 
         <Image src={"/edit.png"} alt="" width={25} height={25} />
         <Image src={"/delete.png"} alt="" width={30} height={30} />

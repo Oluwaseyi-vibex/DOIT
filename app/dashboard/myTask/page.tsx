@@ -16,7 +16,7 @@ export default function MyTask() {
           </div>
 
           <div className="mt-5 flex flex-col gap-4">
-            <ToDoTaskCard />
+            {/* <ToDoTaskCard /> */}
             <PendingTaskCard />
           </div>
         </div>

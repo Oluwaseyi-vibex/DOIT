@@ -34,7 +34,7 @@ const DashboardNavSection = () => {
     return <div>Your session has expired. Please log in again.</div>;
   }
 
-  console.log(session?.user?.token);
+  // console.log(session?.user?.token);
   if (session?.user?.token) {
     http.setJwt(session.user.token);
   }
@@ -50,9 +50,6 @@ const DashboardNavSection = () => {
       <div className="w-full flex flex-col items-center">
         <Link
           onMouseUp={toggleFocus}
-          // onMouseOut={() => {
-          //   setIsFocus(false);
-          // }}
           href={"/dashboard"}
           className="w-full focus:bg-white focus:text-[#FF6767] text-white rounded-[14px]  flex items-center gap-5 p-4"
         >
@@ -83,21 +80,6 @@ const DashboardNavSection = () => {
           }}
         >
           <DashboardNav
-            navLink="/dashboard/vitalTask"
-            img="/vital.png"
-            name="Vital Task"
-            width={9}
-            height={20}
-          />
-        </div>
-
-        <div
-          className="w-full"
-          onClick={() => {
-            setIsFocus(false);
-          }}
-        >
-          <DashboardNav
             navLink="/dashboard/myTask"
             img="/mytask.png"
             name="My Task"
@@ -105,52 +87,6 @@ const DashboardNavSection = () => {
             height={20}
           />
         </div>
-
-        <div
-          className="w-full"
-          onClick={() => {
-            setIsFocus(false);
-          }}
-        >
-          <DashboardNav
-            navLink="/dashboard/taskCategories"
-            img="/taskCat.png"
-            name="Task Categories"
-            width={22}
-            height={22}
-          />
-        </div>
-
-        <div
-          className="w-full"
-          onClick={() => {
-            setIsFocus(false);
-          }}
-        >
-          <DashboardNav
-            navLink="#"
-            img="/settings.png"
-            name="Settings"
-            width={22}
-            height={22}
-          />
-        </div>
-
-        <div
-          className="w-full"
-          onClick={() => {
-            setIsFocus(false);
-          }}
-        >
-          <DashboardNav
-            navLink="#"
-            img="/help.png"
-            name="Help"
-            width={22}
-            height={22}
-          />
-        </div>
-
         <div
           className="w-full"
           onClick={() => {
@@ -165,6 +101,21 @@ const DashboardNavSection = () => {
             height={22}
           />
         </div>
+
+        {/* <div
+          className="w-full"
+          onClick={() => {
+            setIsFocus(false);
+          }}
+        >
+          <DashboardNav
+            navLink="/dashboard/taskCategories"
+            img="/taskCat.png"
+            name="Task Categories"
+            width={22}
+            height={22}
+          />
+        </div> */}
       </div>
 
       <div

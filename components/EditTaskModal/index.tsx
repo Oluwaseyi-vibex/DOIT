@@ -3,52 +3,15 @@ import { montserrat } from "@/utils/fonts/font";
 import { observer } from "mobx-react-lite";
 import http from "@/services/httpServices";
 import toast, { Toaster } from "react-hot-toast";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-// import
 
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import todoStore from "@/mobx/TodoStore";
 import { useSearchParams } from "next/navigation";
-import { fetchProjectTodos } from "@/services/TodoServices";
-
-interface TodoData {
-  title: string;
-  description: string;
-  priority: string;
-  expiresAt: string;
-  status: string;
-  completed: boolean;
-}
 
 const EditTaskModal = () => {
   const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-  const searchParamss = useSearchParams();
-  const pId = searchParamss.get("id") as string;
-  const { data, isFetching, isLoading, isError, error } = useQuery({
-    queryKey: ["todos", pId],
-    queryFn: () => todoStore.fetchProjectTodos(pId as string),
-    // enabled: !!pId && !hasRun, // Run only if id exists and the query hasn't run before
-    retry: false,
-    refetchInterval: 300000,
-  });
-
-  const myTodos = data && data.data ? data.data : [];
-
-  // useEffect(() => {
-  //   if (data) {
-  //     // Store data in MobX
-  //     todoStore.setEditTodos(myTodos);
-  //     const editInput = todoStore.todos;
-  //     // console.log(
-  //     //   "hey",
-  //     //   editInput.map((editTitle: string) => editTitle)
-  //     // );
-  //   }
-  // }, []);
-
   const {
     register,
     handleSubmit,
@@ -56,78 +19,90 @@ const EditTaskModal = () => {
     reset,
   } = useForm({
     defaultValues: {
-      title: todoStore.todo.title ? todoStore.todo.title : "",
-      expireAt: "2024-08-30T14:00",
-      priority: todoStore.todo.priority ? todoStore.todo.priority : "", // Single value for the radio group
-      description: todoStore.todo.description ? todoStore.todo.description : "",
+      title: "",
+      expireAt: "",
+      priority: "",
+      description: "",
+      status: "",
+      completed: todoStore.todo?.completed ?? false,
     },
   });
 
-  // console.log(todoStore.todo.expiresAt);
-
-  const onSubmit = (data: any) => {
-    console.log(register);
-    reset(); // Optionally reset the form after submission
-  };
-
-  const handlePriorityChange = (priority: string) => {
-    setPriority(priority);
-    setExtremeChecked(priority === "extreme");
-    setModerateChecked(priority === "moderate");
-    setLowChecked(priority === "low");
-  };
-
-  // const handleExpireDateChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   const dateValue = e.target.value;
-  //   SetExpiresAt(dateValue);
-  //   const currentDate = new Date();
-  //   console.log(currentDate);
-  //   todoStore.setNewDeadline(currentDate.toISOString());
-  //   console.log(todoStore.todoExpireDate);
-  // };
-
-  const searchParams = useSearchParams();
-  const projectId = searchParams.get("id") as string;
-  // console.log(`projectId::: ${projectId}`);
-  const { todoId } = todoStore;
-  // console.log(`todoId::: ${todoId}`);
-
-  // const updateTodo = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await http.patch(
-  //       `${baseURL}/todo/update?projectid=${projectId}&todoid=${todoId}`,
-  //       todoData
-  //     );
-  //     console.log("Task updated successfully:", response.data);
-  //     toast.success("Task updated successfully");
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.log(`Error updating todo: ${error}`, error);
-  //     toast.error("Failed to update task");
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
     const date = new Date(todoStore.todo.expiresAt);
-
-    const year = date.getUTCFullYear();
-    const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1
-    const day = String(date.getUTCDate()).padStart(2, "0");
-    const hours = String(date.getUTCHours()).padStart(2, "0");
-    const minutes = String(date.getUTCMinutes()).padStart(2, "0");
-
-    const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
-    reset({
-      title: todoStore.todo.title ? todoStore.todo.title : "",
-      expireAt: formattedDate,
-
-      // "2024-08-30T14:00",
-      priority: todoStore.todo.priority ? todoStore.todo.priority : "", // Single value for the radio group
-      description: todoStore.todo.description ? todoStore.todo.description : "",
-    });
+    const formattedDate = `${date.getUTCFullYear()}-${String(
+      date.getUTCMonth() + 1
+    ).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}T${String(
+      date.getUTCHours()
+    ).padStart(2, "0")}:${String(date.getUTCMinutes()).padStart(2, "0")}`;
+    console.log(formattedDate);
+    if (todoStore.todo) {
+      reset({
+        title: todoStore.todo.title || "",
+        expireAt: formattedDate,
+        priority: todoStore.todo.priority || "",
+        description: todoStore.todo.description || "",
+        status: todoStore.todo.status || "",
+        completed: todoStore.todo.completed,
+      });
+    }
   }, [todoStore.todo, reset]);
+
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async (data: any) => {
+    // console.log("dataexpireat", data.expireAt);
+    // Get the value from the input
+    const date = new Date(data.expireAt);
+
+    const offset = date.getTimezoneOffset();
+    const hoursOffset = String(Math.abs(Math.floor(offset / 60))).padStart(
+      2,
+      "0"
+    );
+    const minutesOffset = String(Math.abs(offset % 60)).padStart(2, "0");
+    const sign = offset <= 0 ? "+" : "-";
+    const timezoneOffset = `${sign}${hoursOffset}:${minutesOffset}`;
+
+    // Format the date to the desired format
+    const formattedDate = `${date.getFullYear()}-${String(
+      date.getMonth() + 1
+    ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}T${String(
+      date.getHours()
+    ).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}:${String(
+      date.getSeconds()
+    ).padStart(2, "0")}${timezoneOffset}`;
+
+    try {
+      setLoading(true);
+      const response = await http.patch(
+        `${baseURL}/todo/update?projectid=${projectId}&todoid=${todoStore.todo.id}`,
+        {
+          title: data.title,
+          expireAt: formattedDate,
+          priority: data.priority,
+          description: data.description,
+          status: data.status,
+          completed: data.completed,
+        }
+      );
+      const modal = document.getElementById(
+        "edit_modal"
+      ) as HTMLDialogElement | null;
+      modal?.close();
+      console.log(response);
+      toast.success("Task updated successfully");
+
+      setLoading(false);
+    } catch (error) {
+      console.error(`Error updating todo: ${error}`);
+      toast.error("Failed to update task");
+      setLoading(false);
+    }
+  };
+
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("id");
 
   return (
     <dialog id="edit_modal" className="modal ">
@@ -159,7 +134,7 @@ const EditTaskModal = () => {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="w-full h-[78%] gap-4 flex flex-col items-start p-4 border border-[#A1A3AB] shadow-sm"
+          className="w-full h-fit gap-4 flex flex-col items-start p-4 border border-[#A1A3AB] shadow-sm"
         >
           <div className="flex gap-2 flex-col">
             <label
@@ -187,6 +162,7 @@ const EditTaskModal = () => {
             </label>
             <input
               type="datetime-local"
+              // value="expireAt"
               {...register("expireAt", {
                 required: "Expire at date is required",
               })}
@@ -213,8 +189,9 @@ const EditTaskModal = () => {
                   {...register("priority", {
                     required: "Priority is required",
                   })}
-                  value="Extreme"
+                  value="extreme"
                   className="radio rounded-none border-[#A1A3AB] w-[15px] h-[15px]"
+                  // checked={todoStore.todo.priority == "extreme"}
                 />
               </div>
 
@@ -226,8 +203,9 @@ const EditTaskModal = () => {
                   {...register("priority", {
                     required: "Priority is required",
                   })}
-                  value="Moderate"
+                  value="moderate"
                   className="radio rounded-none bg-white border border-[#A1A3AB] w-[15px] h-[15px]"
+                  // checked={todoStore.todo.priority == "moderate"}
                 />
               </div>
 
@@ -239,8 +217,9 @@ const EditTaskModal = () => {
                   {...register("priority", {
                     required: "Priority is required",
                   })}
-                  value="Low"
+                  value="low"
                   className="radio rounded-none bg-white border border-[#A1A3AB] w-[15px] h-[15px]"
+                  // checked={todoStore.todo.priority == "low"}
                 />
               </div>
             </div>
@@ -268,7 +247,11 @@ const EditTaskModal = () => {
           </div>
 
           <button type="submit" className="py-2 px-4 bg-[#F24E1E] text-white">
-            <p>Update</p>
+            {loading ? (
+              <span className="loading loading-spinner loading-md"></span>
+            ) : (
+              <p>Update</p>
+            )}
           </button>
         </form>
 

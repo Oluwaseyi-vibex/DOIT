@@ -3,25 +3,21 @@ import { observer } from "mobx-react-lite";
 import projectStore from "@/mobx/ProjectStore";
 
 const DateInputComponent: React.FC = () => {
-  const [inputDate, setInputDate] = useState<string>("");
+  // const [inputDate, setInputDate] = useState<string>("");
 
   const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     const dateValue = e.target.value;
-    setInputDate(dateValue);
-    const currentDate = new Date();
+    // setInputDate(dateValue);
+    const currentDate = new Date(dateValue);
     console.log(currentDate);
-    projectStore.setNewDeadline(currentDate.toISOString());
-    console.log(projectStore.projectDeadline);
+    projectStore.project.expiresAt = currentDate.toISOString();
+    console.log(projectStore.project.expiresAt);
   };
 
   return (
     <div>
       <label>
-        <input
-          type="datetime-local"
-          value={inputDate}
-          onChange={handleDateChange}
-        />
+        <input type="datetime-local" onChange={handleDateChange} />
       </label>
     </div>
   );

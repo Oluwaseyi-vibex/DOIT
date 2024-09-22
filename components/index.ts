@@ -11,6 +11,10 @@ import SignInForm from "./SignInForm";
 import Logout from "./signout";
 import SessionProviderWrapper from "./SessionProviderWrapper";
 import CreateProject from "./CreateProject";
+import EditProjectModal from "./editProject";
+import ProjectDeleteModal from "./projectDeleteModal";
+import TodoDeleteModal from "./todoDeleteModal";
+
 
 export{
     RealTimeDate,
@@ -26,4 +30,8 @@ export{
     Logout,
     SessionProviderWrapper,
     CreateProject,
+    EditProjectModal,
+    ProjectDeleteModal,
+    TodoDeleteModal,
+
 }

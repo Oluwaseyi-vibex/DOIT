@@ -65,6 +65,10 @@ const AddTaskModal = () => {
       const response = await http.post(`${baseURL}/todo/create`, todoData);
       console.log("Task created successfully:", response.data);
       toast.success("Task created successfully");
+      const modal1 = document.getElementById(
+        "my_modal_1"
+      ) as HTMLDialogElement | null;
+      modal1?.close();
       setLoading(false);
     } catch (error) {
       console.log(`Error creating todo: ${error}`, error);
@@ -113,7 +117,7 @@ const AddTaskModal = () => {
             <input
               type="text"
               placeholder=""
-              value={title}
+              // value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
@@ -131,7 +135,7 @@ const AddTaskModal = () => {
             <input
               type="datetime-local"
               placeholder=""
-              value={expiresAt}
+              // value={expiresAt}
               onChange={handleExpireDateChange}
               className="input input-bordered text-black w-[511px] bg-white max-w-full border-[#A1A3AB] h-[37px] p-2"
             />
@@ -188,7 +192,7 @@ const AddTaskModal = () => {
               Task Description
             </label>
             <textarea
-              value={description}
+              // value={description}
               onChange={(e) => {
                 setDescription(e.target.value);
               }}

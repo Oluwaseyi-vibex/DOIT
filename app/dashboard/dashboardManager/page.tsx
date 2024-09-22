@@ -46,24 +46,15 @@ function DashboardManager() {
 
   const [hasRun, setHasRun] = useState(false); // State to track if the query has already run
 
-  const { data, isFetching, isLoading, isError, error } = useQuery({
+  const { data, isFetching, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["todos", pId],
     queryFn: () => fetchProjectTodos(pId as string),
     // enabled: !!pId && !hasRun, // Run only if id exists and the query hasn't run before
-    retry: false,
-    refetchInterval: 300000,
+    // retry: false,
+    refetchInterval: 5000,
   });
 
   const myTodos = data && data.data ? data.data : [];
-
-  const setTodoIdFunction = () => {
-    todoStore.setTodoId(myTodos?.map((todoId: any) => todoId.id));
-    // console.log(todoStore.todoId);
-  }; // console.log(myTodos);
-
-  useEffect(() => {
-    setTodoIdFunction();
-  });
 
   return (
     <main className="w-full h-full flex flex-col justify-end  ">
@@ -122,34 +113,35 @@ function DashboardManager() {
             </div>
             <div className="w-full overflow-hidden h-fit ">
               <CustomScroll heightRelativeToParent="100%">
-                <div className="w-[352px] h-[385px] p-3">
-                  {isLoading ? (
-                    <div className="w-full h-full flex flex-col items-center text-black text-lg justify-center">
-                      <span className="loading loading-bars loading-lg"></span>{" "}
-                    </div>
-                  ) : (
-                    <div className="w-full flex flex-col gap-4">
-                      {Array.isArray(myTodos) && myTodos.length > 0 ? (
-                        myTodos.map((todo: any) => (
-                          <ToDoTaskCard
-                            key={todo.id}
-                            id={todo.id}
-                            name={todo.title}
-                            descrip={todo.description}
-                            priority={todo.priority}
-                            status={todo.status}
-                            date={todo.expiresAt}
-                            EditTodo={todo}
-                          />
-                        ))
-                      ) : (
-                        <p className="text-lg text-error font-medium">
-                          No tasks available!
-                        </p>
-                      )}
-                    </div>
-                  )}
-                </div>
+                {/* <div className="w-[352px] h-[385px] p-3"> */}
+                {isLoading ? (
+                  <div className="w-full h-full flex flex-col items-center text-black text-lg justify-center">
+                    <span className="loading loading-bars loading-lg"></span>{" "}
+                  </div>
+                ) : (
+                  <div className="flex flex-col w-[380px] h-[385px] p-6 gap-4">
+                    {Array.isArray(myTodos) && myTodos.length > 0 ? (
+                      myTodos.map((todo: any) => (
+                        <ToDoTaskCard
+                          key={todo.id}
+                          id={todo.id}
+                          name={todo.title}
+                          descrip={todo.description}
+                          priority={todo.priority}
+                          status={todo.status}
+                          date={todo.expiresAt}
+                          EditTodo={todo}
+                          todoId={todo.id}
+                        />
+                      ))
+                    ) : (
+                      <p className="text-lg text-error font-medium">
+                        No tasks available!
+                      </p>
+                    )}
+                  </div>
+                )}
+                {/* </div> */}
               </CustomScroll>
             </div>
           </div>

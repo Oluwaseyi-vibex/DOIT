@@ -1,5 +1,4 @@
 "use client";
-// import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Image from "next/image";
 import ProjectCard from "@/components/projectCard";
@@ -22,31 +21,29 @@ interface ProjectData {
 }
 
 const Projects = () => {
-  // const router = useRouter();
-  // const { id } = router.query;
   const [isProjectModalVisible, setProjectModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [newProjectName, setNewProjectName] = useState("");
+  const [aboutProject, setNewAboutProject] = useState("");
 
   const toggleProjectModal = () => {
     setProjectModal(!isProjectModalVisible);
   };
 
   const handleProjectNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    projectStore.setNewProjectName(e.target.value);
-    // console.log(projectStore.newProjectName);
+    setNewProjectName(e.target.value);
   };
 
   const handleAboutProjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    projectStore.setNewAboutProject(e.target.value);
-    // console.log(projectStore.aboutProject);
+    setNewAboutProject(e.target.value);
   };
 
   const { data: session, status } = useSession();
 
   const projectData: ProjectData = {
-    title: projectStore.newProjectName,
-    about: projectStore.aboutProject,
-    expiresAt: projectStore.projectDeadline,
+    title: newProjectName,
+    about: aboutProject,
+    expiresAt: projectStore.project.expiresAt,
   };
 
   const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -69,18 +66,13 @@ const Projects = () => {
     }
   };
 
-  const { isFetching, isError, data, error } = useQuery({
+  const { isFetching, isError, data, error, refetch } = useQuery({
     queryKey: ["projects"],
     queryFn: fetchUserProjects,
+    refetchInterval: 1000,
   });
 
   const myProjects = data && data.data ? data.data : [];
-  // console.log("mypid", myProjects.id);
-  // const projectId = myProjects.map((todo: any) => todo.id);
-  // projectStore.setProjectId(projectId);
-  // console.log(projectStore.projectId);
-
-  // console.log(myProjects);
 
   return (
     <>
@@ -97,15 +89,24 @@ const Projects = () => {
 
           <div className="w-full h-[550px] overflow-hidden">
             <div className="w-full grid-cols-4 gap-0  grid overflow-y-scroll  h-full">
-              {myProjects?.map((project: any) => (
-                <ProjectCard
-                  key={project.id}
-                  newProjectName={project.title}
-                  projectDeadline={project.expiresAt}
-                  aboutProject={project.about}
-                  projectId={project.id}
-                />
-              ))}
+              {Array.isArray(myProjects) && myProjects.length > 0 ? (
+                myProjects.map((project: any) => (
+                  <ProjectCard
+                    id={project.id}
+                    newProjectName={project.title}
+                    projectDeadline={project.expiresAt}
+                    aboutProject={project.about}
+                    projectId={project.id}
+                    EditProject={project}
+                    completed={project.completed}
+                    refetch={refetch}
+                  />
+                ))
+              ) : (
+                <p className="text-lg text-error font-medium">
+                  No Projects available!
+                </p>
+              )}
 
               <div className="flex w-fit gap-3">
                 <div
@@ -148,7 +149,7 @@ const Projects = () => {
                           type="text"
                           required
                           className="p-2 rounded-md"
-                          value={projectStore.newProjectName}
+                          value={newProjectName}
                           onChange={handleProjectNameChange}
                         />
                       </div>
@@ -164,7 +165,7 @@ const Projects = () => {
                           type="text"
                           required
                           className="p-2 rounded-md"
-                          value={projectStore.aboutProject}
+                          // value={aboutProject}
                           onChange={handleAboutProjectChange}
                         />
                       </div>
