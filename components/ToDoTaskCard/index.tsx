@@ -19,6 +19,7 @@ function ToDoTaskCard({
   date,
   EditTodo,
   todoId,
+  completed,
 }: {
   id: string;
   name: string;
@@ -28,6 +29,7 @@ function ToDoTaskCard({
   date: string;
   EditTodo: Todo;
   todoId: string;
+  completed: boolean;
 }) {
   // useEffect(() => {
   const newdate = new Date(`${date}`);
@@ -39,45 +41,63 @@ function ToDoTaskCard({
   const minutes = String(newdate.getUTCMinutes()).padStart(2, "0");
 
   const formattedDate = `${year}-${month}-${day}`;
-  console.log(todoId);
+  // console.log(todoId);
   // });
 
-  useEffect(() => {
-    todoStore.setTodoId(id);
-    console.log(todoStore.todoId);
-    console.log(id);
-  });
+  // useEffect(() => {
+  //   todoStore.setTodoId(id);
+  //   console.log(todoStore.todoId);
+  //   console.log(id);
+  // });
 
   const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   return (
     <div
       key={id}
-      className="w-full flex  gap-8 justify-center items-center rounded-2xl p-2 border h-[116px]"
+      className="flex rounded-2xl h-fit text-sm relative p-3 gap-4 border "
     >
-      <span className="w-[15px] h-[15px] outline outline-2 outline-[#F21E1E] rounded-full bg-[#white] flex items-center justify-center"></span>
+      {status === "pending" && completed == false && (
+        <span className="w-[15px] h-[15px] outline outline-2 outline-[#0225ff] rounded-full bg-[#white] flex items-center justify-center"></span>
+      )}
+      {status === "pending" && completed == true && (
+        <span className="w-[15px] h-[15px] outline outline-2 outline-[#F21E1E] rounded-full bg-[#white] flex items-center justify-center"></span>
+      )}
 
-      <div className="w-[332px] h-full flex flex-col gap-2 justify-between">
-        <h1 className="text-black font-bold uppercase text-sm">{name}</h1>
+      <div className="min-w-[250px] flex h-fit flex-col ">
+        <div className="flex flex-col h-fit">
+          <h1 className="text-black font-bold uppercase">{name}</h1>
 
-        <p className="text-[#747474] max-w-full text-[10px]">{descrip}</p>
+          <p className="text-[#747474] relative z-0 break-words whitespace-normal">
+            {descrip}
+          </p>
+        </div>
 
-        <div className="flex justify-between text-[10px] items-center">
+        <div className="flex gap-8 text-xs  items-center">
           <p className="text-black">
-            Priority: <span className="text-[#42ADE2]"> {priority}</span>
+            Priority: <br /> <span className="text-[#42ADE2]"> {priority}</span>
           </p>
           <p className="text-black">
-            Status: <span className="text-[#F21E1E]"> {status}</span>
+            Status: <br />
+            <span className="text-[#F21E1E]">
+              {" "}
+              {status === "pending" && completed == false && (
+                <span> Pending</span>
+              )}
+              {status === "pending" && completed == true && (
+                <span> Completed</span>
+              )}
+            </span>
           </p>
 
-          <p className="text-[10px] text-[#A1A3AB] ">
+          <p className=" text-[#A1A3AB] ">
             Expire at: <br />
             {formattedDate}
           </p>
         </div>
       </div>
 
-      <div className="flex items-center w-fit h-full flex-col gap-3 justify-center">
+      <div className="flex items-center justify-between w-fit h-full flex-col  ">
         <Image
           className="cursor-pointer"
           onClick={() => {
@@ -87,7 +107,7 @@ function ToDoTaskCard({
               "edit_modal"
             ) as HTMLDialogElement | null;
             modal2?.showModal();
-            // console.log(id);
+            // console.log();
           }}
           src={"/edit.png"}
           alt=""

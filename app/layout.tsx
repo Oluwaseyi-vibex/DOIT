@@ -5,6 +5,8 @@ import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import "@mantine/core/styles.css";
+import { createTheme, MantineProvider } from "@mantine/core";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -42,6 +44,9 @@ export const metadata: Metadata = {
 //     }
 //   }
 // );
+const theme = createTheme({
+  /** Put your mantine theme override here */
+});
 
 export default function RootLayout({
   children,
@@ -51,7 +56,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ClientProviders>{children}</ClientProviders>
+        <ClientProviders>
+          <MantineProvider theme={theme}>{children}</MantineProvider>
+        </ClientProviders>
       </body>
     </html>
   );

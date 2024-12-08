@@ -11,14 +11,15 @@ const Dashboard = () => {
   const { data: session, status } = useSession();
   return (
     <main className="w-full h-full flex flex-col overflow-hidden justify-end  ">
-      <div className="w-full h-[93%] flex flex-col items-center gap-6  p-6 ">
+      <div className="w-full h-full lg:h-[93%] flex flex-col items-center gap-6 p-4 lg:p-6 ">
         <div className="flex justify-between w-full">
           <div className="w-full h-fit flex items-center gap-3">
             {session && (
-              <h1 className="font-semibold text-4xl text-black">
+              <h1 className="font-semibold text-lg lg:text-4xl text-black">
                 Welcome back, {session.user?.name}
               </h1>
             )}
+
             <Image src={"/handwave.png"} alt="" width={42.42} height={41} />
           </div>
         </div>

@@ -1,77 +1,53 @@
 import { makeAutoObservable } from "mobx";
-export type Project ={
-    id: string,
-    title: string,
-    about: string,
-    completed: boolean,
-    completedAt: string,
-    expiresAt: string,
-    createdAt: string,
-    updatedAt: string,
-    userId: string,
-}
-class ProjectStore{
-    project: Project = {
-        id: '',
-        title: '',
-        about: '',
-        completed: false,
-        completedAt: '',
-        expiresAt: '',
-        createdAt: '',
-        updatedAt: '',
-        userId: '',
-    };
-    isModalOpen = false;
-    // newProjectName = '';
-    // aboutProject= ''
-    // projectDeadline = ''
-    // projectId=''
 
-    constructor() {
-        makeAutoObservable(this);
-    }
+export type Project = {
+  id: string;
+  title: string;
+  about: string;
+  completed: boolean;
+  completedAt: string;
+  expiresAt: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+};
 
-    setEditProjects(payload: Project) {
-        let newProject = {...payload}
-        this.project = newProject
-    }
+class ProjectStore {
+  project: Project = {
+    id: '',
+    title: '',
+    about: '',
+    completed: false,
+    completedAt: '',
+    expiresAt: '',
+    createdAt: '',
+    updatedAt: '',
+    userId: '',
+  };
 
-    openModal = () => {
-        this.isModalOpen = true;
-    };
+  isModalOpen = false;
+  testId: string = ''; // New testId property
 
-    closeModal = () => {
-        this.isModalOpen = false;
-    };
+  constructor() {
+    makeAutoObservable(this);
+  }
 
-    // setNewProjectName = (name: string) => {
-    //     this.newProjectName = name;
-    // };
+  setEditProjects(payload: Project) {
+    let newProject = { ...payload };
+    this.project = newProject;
+  }
 
-    // setNewAboutProject = (about: string)=>{
-    //     this.aboutProject= about;
-    // }
+  openModal = () => {
+    this.isModalOpen = true;
+  };
 
-    // setNewDeadline = (deadline: string) => {
-    //     this.projectDeadline= deadline;
-    // }
+  closeModal = () => {
+    this.isModalOpen = false;
+  };
 
-    // setProjectId=(id: string)=>{
-    //     this.projectId= id;
-    // }
-
-    // addProject = () => {
-    //     if (this.newProjectName.trim()) {
-    //         this.projects.push(this.newProjectName, this.aboutProject, this.projectDeadline);
-    //         this.newProjectName = '';
-    //         this.aboutProject= '';
-    //         this.projectDeadline=''
-    //         this.isModalOpen = false;
-    //         // this.projectId= ''
-    //     }
-    // };
-
+  setTestId = (id: string) => {
+    this.testId = id; // Method to update the testId
+  };
 }
 
 const projectStore = new ProjectStore();

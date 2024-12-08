@@ -30,10 +30,10 @@ const RealTimeDate: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <p className="font-medium text-black text-[15px]">
+      <p className="font-medium text-black text-xs lg:text-[15px]">
         {formatDay(currentDate)}
       </p>
-      <p className="text-[#3ABEFF] text-[14px] font-medium">
+      <p className="text-[#3ABEFF] text-xs lg:text-[14px] font-medium">
         {formatDate(currentDate)}
       </p>
     </div>

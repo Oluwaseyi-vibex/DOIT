@@ -77,18 +77,18 @@ const Projects = () => {
   return (
     <>
       <main className="w-full h-full flex flex-col overflow-hidden justify-end  ">
-        <div className="w-full h-[93%] flex flex-col items-center gap-6  p-6 ">
+        <div className="w-full h-[96%] lg:h-[93%] flex flex-col overflow-y-auto items-center gap-6 p-4 lg:p-6 ">
           <div className="flex justify-between w-full">
-            <div className="w-full h-fit flex items-center gap-3">
-              <h1 className="font-semibold text-4xl text-black">
+            <div className="w-full h-fit flex items-center lg:gap-3">
+              <h1 className="font-semibold text-3xl lg:text-4xl text-black">
                 Welcome back, {session?.user.name}
               </h1>
               <Image src={"/handwave.png"} alt="" width={42.42} height={41} />
             </div>
           </div>
 
-          <div className="w-full h-[550px] overflow-hidden">
-            <div className="w-full grid-cols-4 gap-0  grid overflow-y-scroll  h-full">
+          <div className="w-full lg:h-[550px] py-4 h-full ">
+            <div className="w-full grid-cols-1 lg:grid-cols-4 lg:gap-0 gap-4  grid h-full">
               {Array.isArray(myProjects) && myProjects.length > 0 ? (
                 myProjects.map((project: any) => (
                   <ProjectCard
@@ -111,7 +111,7 @@ const Projects = () => {
               <div className="flex w-fit gap-3">
                 <div
                   onClick={toggleProjectModal}
-                  className="w-[200px]  p-6 flex rounded-lg justify-center items-center h-[100px] bg-black cursor-pointer"
+                  className="lg:w-[200px] w-full p-6 flex rounded-lg justify-center items-center h-[100px] bg-black cursor-pointer"
                 >
                   <p className="text-sm font-thin text-white">
                     Add new project
@@ -119,7 +119,7 @@ const Projects = () => {
                 </div>
 
                 {isProjectModalVisible && (
-                  <div className="glass w-[300px] h-fit text-white flex flex-col gap-10 p-4 rounded-lg duration-500 transition-all ease-in  bg-[rgb(40,46,51)]">
+                  <div className="glass lg:w-[300px] absolute bottom-4 h-fit text-white flex flex-col gap-10 p-4 rounded-lg duration-500 transition-all ease-in  bg-[rgb(40,46,51)]">
                     <div className="w-full flex items-center ">
                       <h1 className="w-full text-center tracking-wide text-base font-semibold">
                         Create Project

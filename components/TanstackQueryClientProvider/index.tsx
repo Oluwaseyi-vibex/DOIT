@@ -1,18 +1,20 @@
 "use client";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import {
+  QueryClientProvider as TanstackQueryClientProvider,
+  QueryClient,
+} from "@tanstack/react-query";
 
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-
-const QueryClientProvider = () => {
+const AppQueryClientProvider = () => {
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <TanstackQueryClientProvider client={queryClient}>
       {/* The rest of your application */}
       <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    </TanstackQueryClientProvider>
   );
 };
 
-export default QueryClientProvider;
+export default AppQueryClientProvider;

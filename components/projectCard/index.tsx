@@ -49,7 +49,7 @@ const ProjectCard = ({
   return (
     <div
       key={id}
-      className="w-[250px] py-4 relative z-0 scroll-container px-4 justify-between max-h-[150px] overflow-auto rounded-xl flex flex-col gap-2 bg-[#FF6767]/40 "
+      className="lg:w-[250px] w-full py-4 relative z-0 scroll-container px-4 justify-between max-h-[150px] overflow-auto rounded-xl flex flex-col gap-2 bg-[#FF6767]/40 "
     >
       <Link
         href={`/dashboard/dashboardManager?name=${projectName}&id=${projectId}&todoid=${todoId}`}

@@ -14,6 +14,7 @@ import CreateProject from "./CreateProject";
 import EditProjectModal from "./editProject";
 import ProjectDeleteModal from "./projectDeleteModal";
 import TodoDeleteModal from "./todoDeleteModal";
+import DashboardServerWrapper from "./DashboardServerWrapper";
 
 
 export{
@@ -33,5 +34,5 @@ export{
     EditProjectModal,
     ProjectDeleteModal,
     TodoDeleteModal,
-
+DashboardServerWrapper
 }

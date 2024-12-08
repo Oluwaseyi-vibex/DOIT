@@ -14,12 +14,14 @@ interface TodoData {
   priority: string;
   expiresAt: string;
   todoId: string;
+  status: string;
 }
 
 const AddTaskModal = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
+  const [status, setStatus] = useState("pending"); // Default to Pending
   const [expiresAt, SetExpiresAt] = useState("");
   const [todoId, SetTodoId] = useState("");
   const [extremeChecked, setExtremeChecked] = useState(false);
@@ -39,11 +41,11 @@ const AddTaskModal = () => {
   const handleExpireDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     const dateValue = e.target.value;
     SetExpiresAt(dateValue);
-    console.log(dateValue);
+    // console.log(dateValue);
     const currentDate = new Date();
-    console.log(currentDate);
+    // console.log(currentDate);
     todoStore.setNewDeadline(currentDate.toISOString());
-    console.log(todoStore.todoExpireDate);
+    // console.log(todoStore.todoExpireDate);
   };
 
   const searchParams = useSearchParams();
@@ -58,6 +60,7 @@ const AddTaskModal = () => {
       priority: priority,
       expiresAt: todoStore.todoExpireDate,
       todoId: newId,
+      status,
     };
 
     try {
@@ -75,13 +78,13 @@ const AddTaskModal = () => {
       toast.error("Failed to create task");
       setLoading(false);
     }
-    // console.log(todoData);
+    console.log(todoData);
   };
 
   return (
     <dialog id="my_modal_1" className="modal ">
       <div
-        className={` modal-box rounded-none max-h-full h-[90%] flex flex-col justify-between max-w-[70%] p-12 bg-white  `}
+        className={` modal-box rounded-none max-h-full h-[95%] lg:h-[98%] flex flex-col justify-between lg:max-w-[70%] lg:p-12 bg-white  `}
       >
         <div className="w-full flex justify-between">
           <div className="flex flex-col">
@@ -106,7 +109,7 @@ const AddTaskModal = () => {
           </div>
         </div>
 
-        <form className="w-full h-[78%] gap-4 flex flex-col items-start p-4 border border-[#A1A3AB] shadow-sm">
+        <form className="w-full h-full lg:h-[78%] gap-4 my-4 flex flex-col items-start p-4 border border-[#A1A3AB] shadow-sm">
           <div className="flex gap-2 flex-col">
             <label
               className="text-sm font-semibold text-black tracking-wider"
@@ -121,7 +124,7 @@ const AddTaskModal = () => {
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
-              className="input input-bordered text-black w-[511px] bg-white max-w-full border-[#A1A3AB] h-[37px] p-2"
+              className="input input-bordered text-black w-full lg:w-[511px] bg-white max-w-full border-[#A1A3AB] h-[37px] p-3"
             />
           </div>
 
@@ -137,7 +140,7 @@ const AddTaskModal = () => {
               placeholder=""
               // value={expiresAt}
               onChange={handleExpireDateChange}
-              className="input input-bordered text-black w-[511px] bg-white max-w-full border-[#A1A3AB] h-[37px] p-2"
+              className="input input-bordered text-black w-full lg:w-[511px] bg-white max-w-full border-[#A1A3AB] h-[37px] p-2"
             />
           </div>
 
@@ -148,7 +151,7 @@ const AddTaskModal = () => {
             >
               Priority
             </label>
-            <div className="flex gap-10">
+            <div className="flex lg:flex-row flex-col gap-2 lg:gap-10">
               <div className="flex items-center gap-2">
                 <span className="bg-[#F21E1E] w-[7px] h-[7px] rounded-full"></span>
                 <p className="text-[13px]">Extreme</p>
@@ -184,6 +187,24 @@ const AddTaskModal = () => {
             </div>
           </div>
 
+          {/* Status */}
+          <div className="flex gap-2 flex-col">
+            <label className="text-sm font-semibold text-black tracking-wider">
+              Status
+            </label>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="select text-black select-bordered bg-white w-full lg:w-[511px] max-w-full border-[#A1A3AB] h-[37px] p-2"
+            >
+              <option value="" disabled>
+                Select Status
+              </option>
+              <option value="pending">Pending</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+
           <div className="flex h-full gap-2 flex-col">
             <label
               className="text-sm font-semibold text-black tracking-wider"
@@ -196,7 +217,7 @@ const AddTaskModal = () => {
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
-              className="textarea text-black textarea-bordered bg-white w-[511px] h-full border-[#A1A3AB] "
+              className="textarea text-black textarea-bordered bg-white w-full lg:w-[511px] h-full border-[#A1A3AB] "
               placeholder=""
             ></textarea>
           </div>

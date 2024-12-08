@@ -18,11 +18,11 @@ export default function DashboardNav({
   return (
     <Link
       href={navLink}
-      className="w-full  focus:bg-black  focus:rounded-[14px] font-semibold flex items-center justify-evenly gap-5 p-4"
+      className="w-full  focus:bg-black  font-semibold flex items-center justify-evenly gap-5 p-4"
     >
       <Image src={img} alt="" width={width} height={height} className=" " />
 
-      <p className="w-[80%] text-sm">{name}</p>
+      <p className="w-[80%] text-base">{name}</p>
     </Link>
   );
 }

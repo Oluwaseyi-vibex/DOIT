@@ -1,7 +1,23 @@
+"use client";
 import Image from "next/image";
 import { montserrat } from "@/utils/fonts/font";
 import { ToDoTaskCard, PendingTaskCard } from "@/components";
+
+import { useState, useEffect } from "react";
+
+import { CustomScroll } from "react-custom-scroll";
+
 export default function MyTask() {
+  // const { data, isFetching, isLoading, isError, error, refetch } = useQuery({
+  //   queryKey: ["todos", pId],
+  //   queryFn: () => fetchProjectTodos(pId as string),
+  //   // enabled: !!pId && !hasRun, // Run only if id exists and the query hasn't run before
+  //   // retry: false,
+  //   refetchInterval: 5000,
+  // });
+
+  // const myTodos = data && data.data ? data.data : [];
+
   return (
     <main className="w-full h-full flex flex-col justify-end  ">
       <div className="w-full h-[93%] flex justify-between items-center gap-6  p-6 ">
@@ -15,10 +31,57 @@ export default function MyTask() {
             <span className="bg-[#F24E1E] w-[50px] h-[3px]"></span>
           </div>
 
-          <div className="mt-5 flex flex-col gap-4">
-            {/* <ToDoTaskCard /> */}
-            <PendingTaskCard />
-          </div>
+          {/* <div className="mt-5 flex flex-col gap-4">
+            <div className="flex items-center gap-4">
+              <label htmlFor="statusFilter" className="font-medium">
+                Filter by status:
+              </label>
+              <select
+                id="statusFilter"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="border p-2 rounded"
+              >
+                <option value="">All</option>
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+
+            <CustomScroll heightRelativeToParent="100%">
+              <div className="flex flex-col h-[385px] p-3 gap-4">
+                <div className="flex flex-col w-[380px] h-[385px] p-3 gap-4">
+                  {Array.isArray(myTodos) && myTodos.length > 0 ? (
+                    myTodos
+                      .filter((todo: any) =>
+                        statusFilter
+                          ? todo.status.toLowerCase() ===
+                            statusFilter.toLowerCase()
+                          : true
+                      )
+                      .map((todo: any) => (
+                        <ToDoTaskCard
+                          key={todo.id}
+                          id={todo.id}
+                          name={todo.title}
+                          descrip={todo.description}
+                          priority={todo.priority}
+                          status={todo.status}
+                          date={todo.expiresAt}
+                          completed={todo.completed}
+                          EditTodo={todo}
+                          todoId={todo.id}
+                        />
+                      ))
+                  ) : (
+                    <p className="text-lg text-error font-medium">
+                      No tasks available!
+                    </p>
+                  )}
+                </div>
+              </div>
+            </CustomScroll>
+          </div> */}
         </div>
         <div className="w-[50%] px-6 py-12 border border-[#A1A3AB] shadow-[#A1A3AB] shadow-sm rounded-2xl h-full">
           <div className="flex flex-col gap-4">

@@ -9,11 +9,11 @@ export default function Signup() {
   //   redirect("/dashboard");
   // }
   return (
-    <main className="w-full h-full bg-white flex items-center justify-center  rounded-xl">
-      <div className="w-full flex items-end h-full">
+    <div className="w-full h-fit bg-white flex lg:flex-row flex-col p-4  rounded-xl">
+      <div className="w-full lg:flex md:flex hidden items-end h-full">
         <Image src={"/signupImage.png"} alt="" width={333} height={352} />
       </div>
       <SignupForm />
-    </main>
+    </div>
   );
 }

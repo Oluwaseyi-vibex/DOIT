@@ -6,29 +6,6 @@ import { darumadrop_One, poppins } from "@/utils/fonts/font";
 import { gsap } from "gsap";
 
 export default function Home() {
-  const [nextPage, setNextPage] = useState(false);
-  const firstPageRef = useRef(null);
-  const secondPageRef = useRef(null);
-
-  const togglePage = () => {
-    setNextPage(true);
-  };
-
-  useEffect(() => {
-    if (nextPage) {
-      gsap.to(firstPageRef.current, {
-        x: "-100%",
-        duration: 0.5,
-        ease: "power2.inOut",
-      });
-      gsap.fromTo(
-        secondPageRef.current,
-        { x: "100%" },
-        { x: "0%", duration: 0.5, ease: "power2.inOut" }
-      );
-    }
-  }, [nextPage]);
-
   return (
     <main
       className="bg-[#FF6767] w-full h-screen overflow-hidden bg-center text-white "
@@ -39,10 +16,7 @@ export default function Home() {
       }}
     >
       <div
-        ref={firstPageRef}
-        className={`w-full flex flex-col h-screen  p-16 items-center justify-between absolute ${
-          nextPage ? "pointer-events-none" : ""
-        }`}
+        className={`w-full flex flex-col h-screen  p-16 items-center justify-between absolute `}
       >
         <div className="flex gap-4 flex-col items-center">
           <Image src={"/logo.png"} width={150} height={150} alt="Logo" />
@@ -51,17 +25,15 @@ export default function Home() {
           </h1>
         </div>
         <div className="flex flex-col gap-7 items-center">
-          <button
-            onClick={togglePage}
-            className="py-4 px-6 bg-[#FF9090] font-bold text-lg rounded-lg"
-          >
-            Get Started
-          </button>
+          <Link href={"/signUp"}>
+            <button className="py-4 px-6 bg-[#FF9090] font-bold text-lg rounded-lg">
+              Get Started
+            </button>
+          </Link>
         </div>
       </div>
 
-      <div
-        ref={secondPageRef}
+      {/* <div
         className="w-full flex flex-col h-fit items-center px-[350px] justify-start absolute"
         style={{ transform: "translateX(100%)" }}
       >
@@ -85,7 +57,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </div>
+      </div> */}
     </main>
   );
 }

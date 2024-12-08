@@ -8,8 +8,8 @@ export default function AuthLayout({
   return (
     <html lang="en">
       <body>
-        <main
-          className="bg-[#FF6767] w-full py-16 px-44 bg-center h-screen text-white flex items-center justify-center"
+        <div
+          className="bg-[#FF6767] w-full py-8 px-4 lg:py-16 lg:px-44 bg-center h-screen text-white flex items-center justify-center"
           style={{
             backgroundImage: `url('/bg.png')`,
             backgroundRepeat: "no-repeat",
@@ -17,7 +17,7 @@ export default function AuthLayout({
           }}
         >
           {children}
-        </main>
+        </div>
       </body>
     </html>
   );

@@ -41,6 +41,8 @@ const SignInForm = () => {
       toast.success("You are Successfully signed in!");
     } else {
       // Handle error (e.g., display a message to the user)
+      // router.push("/dashboard");
+
       console.error("Error signing in:", response.error);
       toast.error("Something went wrong. Try again");
     }
@@ -48,7 +50,7 @@ const SignInForm = () => {
 
   return (
     <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
-      <label className="input w-[559px] bg-white input-bordered flex items-center gap-8 border-black">
+      <div className="input lg:w-[559px] w-full bg-white input-bordered flex items-center gap-8 border-black">
         <Image src="/username.png" alt="username" width={28} height={28} />
         <input
           type="email"
@@ -58,10 +60,10 @@ const SignInForm = () => {
             required: "Email is required",
           })}
         />
-      </label>
+      </div>
       {errors.email && <p className="text-red-500">{errors.email.message}</p>}
 
-      <label className="input w-[559px] bg-white input-bordered flex items-center gap-8 border-black">
+      <div className="input lg:w-[559px] w-full bg-white input-bordered flex items-center gap-8 border-black">
         <Image src="/password.png" alt="password" width={28} height={28} />
         <input
           type="password"
@@ -71,19 +73,19 @@ const SignInForm = () => {
             required: "Password is required",
           })}
         />
-      </label>
+      </div>
       {errors.password && (
         <p className="text-red-500">{errors.password.message}</p>
       )}
 
-      <div className="flex gap-6 items-center">
+      {/* <div className="flex gap-6 items-center">
         <input
           type="checkbox"
           className="checkbox"
           {...register("rememberMe")}
         />
         <p className="text-base">Remember Me</p>
-      </div>
+      </div> */}
 
       <button
         type="submit"
