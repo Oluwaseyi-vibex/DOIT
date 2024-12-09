@@ -4,6 +4,7 @@ import axios from "axios";
 import http from "@/services/httpServices";
 
 const handler = NextAuth({
+    secret: process.env.NEXTAUTH_SECRET, // Add this line
     session: {
         strategy: 'jwt',
         maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -17,9 +18,8 @@ const handler = NextAuth({
                 email: { label: "Email", type: "text" },
                 password: { label: "Password", type: "password" },
             },
-            async authorize(credentials, req) {
+            async authorize(credentials) {
                 const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
-                console.log(baseURL);
 
                 try {
                     const response = await axios.post(`${baseURL}/auth/login`, {
@@ -28,10 +28,9 @@ const handler = NextAuth({
                     });
 
                     const user = response.data.data;
-                    console.log(user);
 
                     if (user) {
-                        http.setJwt(user?.token)
+                        http.setJwt(user?.token);
                         return {
                             id: user.id,
                             email: user.email,
