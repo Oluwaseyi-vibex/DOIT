@@ -2,12 +2,12 @@
 import { montserrat } from "@/utils/fonts/font";
 import { observer } from "mobx-react-lite";
 import http from "@/services/httpServices";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import todoStore from "@/mobx/TodoStore";
 import { useSearchParams } from "next/navigation";
-import { Textarea } from "@mantine/core";
+import { autorun } from "mobx";
 
 const EditTaskModal = () => {
   const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -19,34 +19,75 @@ const EditTaskModal = () => {
     reset,
   } = useForm({
     defaultValues: {
+      id: "",
       title: "",
       expireAt: "",
       priority: "",
       description: "",
       status: "",
       completed: todoStore.todo?.completed ?? false, // Default to the current value of completed
+      completedAt: "",
+      expiresAt: "",
+      createdAt: "",
+      updatedAt: "",
+      todoId: "",
     },
   });
 
-  useEffect(() => {
-    const date = new Date(todoStore.todo.expiresAt);
-    const formattedDate = `${date.getUTCFullYear()}-${String(
-      date.getUTCMonth() + 1
-    ).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}T${String(
-      date.getUTCHours()
-    ).padStart(2, "0")}:${String(date.getUTCMinutes()).padStart(2, "0")}`;
+  // useEffect(() => {
+  //   const date = new Date(todoStore.todo.expiresAt);
+  //   const formattedDate = `${date.getUTCFullYear()}-${String(
+  //     date.getUTCMonth() + 1
+  //   ).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}T${String(
+  //     date.getUTCHours()
+  //   ).padStart(2, "0")}:${String(date.getUTCMinutes()).padStart(2, "0")}`;
 
-    if (todoStore.todo) {
-      reset({
-        title: todoStore.todo.title || "",
-        expireAt: formattedDate,
-        priority: todoStore.todo.priority || "",
-        description: todoStore.todo.description || "",
-        status: todoStore.todo.status || "pending", // Default to "pending" if status is missing
-        completed: todoStore.todo.completed, // Make sure the checkbox is properly controlled
-      });
-    }
-  }, [todoStore.todo, reset]);
+  //   if (todoStore.todo) {
+  //     reset({
+  //       id: todoStore.todo.id || "",
+  //       title: todoStore.todo.title || "",
+  //       expireAt: formattedDate,
+  //       priority: todoStore.todo.priority || "",
+  //       description: todoStore.todo.description || "",
+  //       status: todoStore.todo.status || "pending", // Default to "pending" if status is missing
+  //       completed: todoStore.todo.completed, // Make sure the checkbox is properly controlled
+  //       completedAt: todoStore.todo.completedAt || "",
+  //       expiresAt: todoStore.todo.expiresAt,
+  //       createdAt: todoStore.todo.createdAt,
+  //       updatedAt: todoStore.todo.updatedAt,
+  //       todoId: todoStore.todo.todoId,
+  //     });
+  //   }
+  // }, [todoStore.todo.id, todoStore.todo.title, reset]);
+
+  useEffect(() => {
+    const disposer = autorun(() => {
+      if (todoStore.todo) {
+        const date = new Date(todoStore.todo.expiresAt);
+        const formattedDate = `${date.getUTCFullYear()}-${String(
+          date.getUTCMonth() + 1
+        ).padStart(2, "0")}-${String(date.getUTCDate()).padStart(
+          2,
+          "0"
+        )}T${String(date.getUTCHours()).padStart(2, "0")}:${String(
+          date.getUTCMinutes()
+        ).padStart(2, "0")}`;
+
+        reset({
+          title: todoStore.todo.title || "",
+          expireAt: formattedDate,
+          priority: todoStore.todo.priority || "",
+          description: todoStore.todo.description || "",
+          status: todoStore.todo.status || "pending",
+          completed: todoStore.todo.completed,
+        });
+      }
+    });
+
+    return () => {
+      disposer();
+    };
+  }, [reset]);
 
   const [loading, setLoading] = useState(false);
 
@@ -71,7 +112,7 @@ const EditTaskModal = () => {
 
     try {
       setLoading(true);
-      const response = await http.patch(
+      await http.patch(
         `${baseURL}/todo/update?projectid=${projectId}&todoid=${todoStore.todo.id}`,
         {
           title: data.title,

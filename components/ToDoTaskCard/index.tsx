@@ -1,13 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import EditTaskModal from "../EditTaskModal";
 import todoStore, { Todo } from "@/mobx/TodoStore";
 import { observer } from "mobx-react-lite";
-import http from "@/services/httpServices";
-import toast from "react-hot-toast";
-import { RefetchOptions } from "@tanstack/react-query";
 import TodoDeleteModal from "../todoDeleteModal";
 
 function ToDoTaskCard({
@@ -37,8 +33,6 @@ function ToDoTaskCard({
   const year = newdate.getUTCFullYear();
   const month = String(newdate.getUTCMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1
   const day = String(newdate.getUTCDate()).padStart(2, "0");
-  const hours = String(newdate.getUTCHours()).padStart(2, "0");
-  const minutes = String(newdate.getUTCMinutes()).padStart(2, "0");
 
   const formattedDate = `${year}-${month}-${day}`;
   // console.log(todoId);
@@ -50,17 +44,17 @@ function ToDoTaskCard({
   //   console.log(id);
   // });
 
-  const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  // const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   return (
     <div
       key={id}
       className="flex rounded-2xl h-fit text-sm relative p-3 gap-4 border "
     >
-      {status === "pending" && completed == false && (
+      {status === "pending" && completed === false && (
         <span className="w-[15px] h-[15px] outline outline-2 outline-[#0225ff] rounded-full bg-[#white] flex items-center justify-center"></span>
       )}
-      {status === "pending" && completed == true && (
+      {status === "pending" && completed === true && (
         <span className="w-[15px] h-[15px] outline outline-2 outline-[#F21E1E] rounded-full bg-[#white] flex items-center justify-center"></span>
       )}
 
@@ -81,10 +75,10 @@ function ToDoTaskCard({
             Status: <br />
             <span className="text-[#F21E1E]">
               {" "}
-              {status === "pending" && completed == false && (
+              {status === "pending" && completed === false && (
                 <span> Pending</span>
               )}
-              {status === "pending" && completed == true && (
+              {status === "pending" && completed === true && (
                 <span> Completed</span>
               )}
             </span>

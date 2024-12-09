@@ -1,9 +1,8 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { darumadrop_One, poppins } from "@/utils/fonts/font";
-import { gsap } from "gsap";
+import { darumadrop_One } from "@/utils/fonts/font";
 
 export default function Home() {
   return (

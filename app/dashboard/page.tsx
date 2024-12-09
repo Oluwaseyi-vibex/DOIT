@@ -8,7 +8,7 @@ const Dashboard = () => {
   const completedTasks = 75;
   const totalTasks = 100;
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   return (
     <main className="w-full h-full flex flex-col overflow-hidden justify-end  ">
       <div className="w-full h-full lg:h-[93%] flex flex-col items-center gap-6 p-4 lg:p-6 ">

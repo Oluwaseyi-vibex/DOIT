@@ -1,11 +1,6 @@
 "use client";
 import Image from "next/image";
 import { montserrat } from "@/utils/fonts/font";
-import { ToDoTaskCard, PendingTaskCard } from "@/components";
-
-import { useState, useEffect } from "react";
-
-import { CustomScroll } from "react-custom-scroll";
 
 export default function MyTask() {
   // const { data, isFetching, isLoading, isError, error, refetch } = useQuery({

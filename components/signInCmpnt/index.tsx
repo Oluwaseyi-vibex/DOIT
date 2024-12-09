@@ -1,6 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
-import { montserrat } from "@/utils/fonts/font";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";

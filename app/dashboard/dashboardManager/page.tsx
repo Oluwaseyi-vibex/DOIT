@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { ToDoTaskCard, AddTaskModal } from "@/components";
 import { CustomScroll } from "react-custom-scroll";
 import { useSession } from "next-auth/react";
@@ -34,15 +34,15 @@ function DashboardManager() {
   const { data: session } = useSession();
 
   const searchParams = useSearchParams();
-  const name = searchParams.get("name") as string;
+  // const name = searchParams.get("name") as string;
   const pId = searchParams.get("id") as string;
   projectStore.setTestId(pId);
 
   // console.log(pId);
 
-  const [hasRun, setHasRun] = useState(false); // State to track if the query has already run
+  // const [hasRun, setHasRun] = useState(false); // State to track if the query has already run
 
-  const { data, isFetching, isLoading, isError, error, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["todos", pId],
     queryFn: () => fetchProjectTodos(pId as string),
     // enabled: !!pId && !hasRun, // Run only if id exists and the query hasn't run before
@@ -53,7 +53,7 @@ function DashboardManager() {
   const myTodos = data && data.data ? data.data : [];
 
   // Define a filter status: 'completed', 'incomplete', or 'all'
-  const [filterStatus, setFilterStatus] = useState("completed");
+  const [filterStatus] = useState("completed");
 
   // Apply the filter to the `myTodos` array
   const filteredTodos = (Array.isArray(myTodos) ? myTodos : []).filter(

@@ -1,14 +1,6 @@
-import React, { useState } from "react";
+import React, { Suspense } from "react";
 import { inter } from "@/utils/fonts/font";
-import Image from "next/image";
-
-import { Drawer } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-
-import DashboardNavSection from "@/components/dashboardNavSection";
-import RealTimeDate from "@/components/RealTimeDate";
-import { DashboardServerWrapper, SessionProviderWrapper } from "@/components";
-import { IconBrandMantine, IconMenu2 } from "@tabler/icons-react";
+import { DashboardServerWrapper } from "@/components";
 
 // import { options } from "../api/auth/[...nextauth]/options";
 // import { getServerSession } from "next-auth/next";
@@ -33,7 +25,9 @@ export default async function DashboardLayout({
         backgroundSize: "cover",
       }}
     >
-      <DashboardServerWrapper>{children}</DashboardServerWrapper>
+      <DashboardServerWrapper>
+        <Suspense>{children}</Suspense>
+      </DashboardServerWrapper>
     </main>
   );
 }

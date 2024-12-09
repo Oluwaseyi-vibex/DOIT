@@ -1,10 +1,9 @@
 // app/layout.tsx
+import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
-import axios from "axios";
-import { useSession } from "next-auth/react";
 import "@mantine/core/styles.css";
 import { createTheme, MantineProvider } from "@mantine/core";
 

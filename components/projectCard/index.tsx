@@ -1,12 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import todoStore from "@/mobx/TodoStore";
 import Image from "next/image";
-import http from "@/services/httpServices";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import projectStore, { Project } from "@/mobx/ProjectStore";
 import { EditProjectModal, ProjectDeleteModal } from "..";
 interface ProjectCardProps {
@@ -41,8 +38,6 @@ const ProjectCard = ({
   const year = newdate.getUTCFullYear();
   const month = String(newdate.getUTCMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1
   const day = String(newdate.getUTCDate()).padStart(2, "0");
-  const hours = String(newdate.getUTCHours()).padStart(2, "0");
-  const minutes = String(newdate.getUTCMinutes()).padStart(2, "0");
 
   const formattedDate = `${year}-${month}-${day}`;
 

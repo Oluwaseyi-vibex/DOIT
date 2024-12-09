@@ -1,7 +1,5 @@
 import { SignupForm } from "@/components";
-import { getServerSession } from "next-auth";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 
 export default function Signup() {
   // const session = await getServerSession;

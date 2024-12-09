@@ -12,7 +12,7 @@ interface ProjectData {
 }
 
 const CreateProject: React.FC = () => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const token = session?.user.token;
   // console.log(token);
@@ -37,8 +37,8 @@ const CreateProject: React.FC = () => {
       );
       console.log("Project created successfully:", response.data);
       toast("Project created successfully");
-      if (response.data) {
-      }
+      // if (response.data) {
+      // }
     } catch (error) {
       console.error("Error creating project:", error);
       toast.error("Failed to create project");

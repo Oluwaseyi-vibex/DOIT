@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
-import React, { useState, FormEvent } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";

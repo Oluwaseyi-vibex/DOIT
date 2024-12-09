@@ -38,7 +38,7 @@ const Projects = () => {
     setNewAboutProject(e.target.value);
   };
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const projectData: ProjectData = {
     title: newProjectName,
@@ -66,7 +66,7 @@ const Projects = () => {
     }
   };
 
-  const { isFetching, isError, data, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["projects"],
     queryFn: fetchUserProjects,
     refetchInterval: 1000,
