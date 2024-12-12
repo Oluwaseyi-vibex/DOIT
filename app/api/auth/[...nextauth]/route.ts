@@ -36,7 +36,7 @@ const handler = NextAuth({
                             email: user.email,
                             name: user.firstname,
                             lastName: user.lastname,
-                            token: user.token,
+                            token: user?.token,
                             exp: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60, // 30 days expiration
                         };
                     } else {
